@@ -11,16 +11,21 @@ const ws = new WebSocket(url);
 
 let mySymbol = null;
 let state = {
-  board: [["","",""],["","",""],["","",""]],
+  board: [
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+  ],
   nextTurn: "X",
   status: "playing",
   winner: null,
-  lastMove: null
+  lastMove: null,
 };
 
 function renderBoard(board) {
   const cell = (v) => (v && v.length ? v : " ");
-  const row = (r) => ` ${cell(board[r][0])} | ${cell(board[r][1])} | ${cell(board[r][2])} `;
+  const row = (r) =>
+    ` ${cell(board[r][0])} | ${cell(board[r][1])} | ${cell(board[r][2])} `;
   console.log("");
   console.log("   0   1   2");
   console.log("0" + row(0));
@@ -37,7 +42,11 @@ function renderStatus() {
   } else if (state.status === "draw") {
     console.log("🤝 Draw!");
   } else {
-    console.log(`Next turn: ${state.nextTurn} ${mySymbol ? `(you are ${mySymbol})` : "(spectator)"}`);
+    console.log(
+      `Next turn: ${state.nextTurn} ${
+        mySymbol ? `(you are ${mySymbol})` : "(spectator)"
+      }`
+    );
     if (mySymbol && state.nextTurn === mySymbol) {
       console.log("Your move: type row col (e.g., 1 2)");
     }
@@ -48,7 +57,10 @@ function send(obj) {
   ws.send(JSON.stringify(obj));
 }
 
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
 rl.on("line", (line) => {
   const trimmed = line.trim();
   if (!trimmed) return;
@@ -75,7 +87,9 @@ rl.on("line", (line) => {
 
 ws.on("open", () => {
   console.log(`Connected to ${url}`);
-  console.log("Type 'join' to become a player (X or O), or watch as spectator.");
+  console.log(
+    "Type 'join' to become a player (X or O), or watch as spectator."
+  );
 });
 
 ws.on("message", (buf) => {
@@ -100,22 +114,19 @@ ws.on("message", (buf) => {
       nextTurn: msg.nextTurn,
       status: msg.status,
       winner: msg.winner,
-      lastMove: msg.lastMove
+      lastMove: msg.lastMove,
     };
     console.clear?.();
     renderBoard(state.board);
-    if (state.lastMove) console.log(`Last move: ${state.lastMove.player} -> (${state.lastMove.row}, ${state.lastMove.col})`);
+    if (state.lastMove)
+      console.log(
+        `Last move: ${state.lastMove.player} -> (${state.lastMove.row}, ${state.lastMove.col})`
+      );
     renderStatus();
     return;
   }
 
-  if (msg.type === "win") {
-    console.log(`🏆 WIN: ${msg.winner}`);
-    return;
-  }
-
-  if (msg.type === "draw") {
-    console.log("🤝 DRAW");
+  if (msg.type === "win" || msg.type === "draw") {
     return;
   }
 
