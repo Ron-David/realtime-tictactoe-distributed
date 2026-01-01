@@ -119,33 +119,19 @@ Clients may connect to different servers and remain fully synchronized.
 
 ## 🤖 AI Usage
 
-AI tools were used to:
+AI tools (**ChatGPT** and **Gemini**) were used throughout the entire development of this project.
 
-- Explore architecture options (Redis pub/sub vs server federation)
-- Draft initial WebSocket server and CLI client code
-- Design the message protocol and edge-case handling
+I relied on AI to:
 
-After AI generation, I:
+- Generate the initial end-to-end solution (servers, client, Redis sync)
+- Explore and compare architectural approaches
+- Draft the WebSocket protocol and core game logic
+- Quickly iterate on implementation details
 
-- Implemented atomic Redis transactions
-- Simplified disconnect/reset behavior
-- Refactored and commented code for readability
-- Verified correctness with multi-server testing
+My role focused on:
 
----
-
-## 🧩 Assumptions
-
-- Single shared game (no rooms)
-- Two active players (X and O); others are spectators
-- Game resets when a player disconnects
-
----
-
-## ✅ Evaluation Coverage
-
-- Real-time sync across servers
-- Two independent backends
-- CLI client
-- Validation and win/draw detection
-- Clear protocol and readable code
+- Reviewing and understanding the generated code
+- Refactoring for clarity and structure (splitting files, improving readability)
+- Fixing bugs discovered during real execution (e.g. reset behavior, duplicate events)
+- Verifying correctness through manual testing across two servers
+- Refining edge cases and improving developer / user experience
