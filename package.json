@@ -1,0 +1,22 @@
+{
+  "name": "tasks",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server:a": "node src/server.js --id A --port 3001",
+    "server:b": "node src/server.js --id B --port 3002",
+    "client:a": "node client/client.js ws://localhost:3001",
+    "client:b": "node client/client.js ws://localhost:3002"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "ioredis": "^5.8.2",
+    "ws": "^8.18.3"
+  },
+  "type": "module",
+  "private": true
+}
