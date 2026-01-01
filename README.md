@@ -135,3 +135,8 @@ My role focused on:
 - Fixing bugs discovered during real execution (e.g. reset behavior, duplicate events)
 - Verifying correctness through manual testing across two servers
 - Refining edge cases and improving developer / user experience
+
+## 🎥 Demo
+
+Demo video showing gameplay across two servers:  
+[Watch demo video](./demo.mov)
