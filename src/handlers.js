@@ -2,7 +2,7 @@ import { MsgType, safeJsonParse, send } from "./protocol.js";
 import { tryMoveAtomic } from "./moves.js";
 import {
   readState,
-  writeState,
+  KEYS,
   assignPlayerAtomic,
   releasePlayerAtomic,
 } from "./redisStore.js";
@@ -84,8 +84,7 @@ async function handleMove({ ws, msg, meta, client, publish }) {
 }
 
 async function handleReset({ client, publish }) {
-  const current = await readState(client);
-
+  // Reset board AND free player slots so new join works
   const resetState = {
     board: [
       ["", "", ""],
@@ -96,11 +95,19 @@ async function handleReset({ client, publish }) {
     status: "playing",
     winner: null,
     lastMove: null,
-    players: current?.players ?? { X: null, O: null },
+    players: { X: null, O: null },
   };
 
-  await writeState(client, resetState);
-  await publish({ type: MsgType.RESET, message: "Game reset" });
+  // Clear player assignments + set new state in one MULTI
+  const multi = client.multi();
+  multi.del(KEYS.PLAYERS);
+  multi.set(KEYS.STATE, JSON.stringify(resetState));
+  await multi.exec();
+
+  await publish({
+    type: MsgType.RESET,
+    message: "Game reset (players cleared)",
+  });
   await publish({ type: MsgType.UPDATE, ...resetState });
 }
 

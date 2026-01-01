@@ -5,6 +5,11 @@ const STATE_KEY = "tictactoe:state";
 const PLAYERS_KEY = "tictactoe:players";
 const CHANNEL = "tictactoe:pubsub";
 
+export const KEYS = {
+  STATE: STATE_KEY,
+  PLAYERS: PLAYERS_KEY,
+};
+
 export function createRedisClients(redisUrl = "redis://localhost:6379") {
   const pub = new Redis(redisUrl);
   const sub = new Redis(redisUrl);
